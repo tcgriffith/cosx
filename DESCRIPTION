@@ -1,11 +1,11 @@
 Package: fortunes
-Version: 1.0-2
-Date: 2004-06-18
+Version: 1.0-3
+Date: 2004-08-10
 Title: R Fortunes
 Author: Achim Zeileis, fortune contributions from Torsten Hothorn, Peter
-        Dalgaard, Uwe Ligges, Kevin Wright
+        Dalgaard, Uwe Ligges, Kevin Wright, Martin Maechler
 Maintainer: Achim Zeileis <Achim.Zeileis@wu-wien.ac.at>
 Description: R Fortunes
 Depends: R (>= 1.4.0)
 License: GPL
-Packaged: Fri Jun 18 18:07:34 2004; zeileis
+Packaged: Tue Aug 10 15:13:56 2004; zeileis
