@@ -16,18 +16,22 @@ read.fortunes <- function(file = NULL)
 
   rval <- NULL
   for(file in fortunes) {
-    rval <- rbind(rval, read.table(file = file, header = TRUE, sep = ";", quote = "\"", colClasses = "character"))
+    rval <- rbind(rval, read.table(file, header = TRUE, sep = ";", quote = "\"", colClasses = "character"))
   }
+
   return(rval)
 }
 
-.First.lib <- function(lib, pkg) {
-  assign("fortunes.data", read.fortunes(), pos = "package:fortunes")
+fortunes.env <- new.env()
+
+.onLoad <- function(lib, pkg) {
+  assign("fortunes.data", read.fortunes(), envir = fortunes.env)
 }
 
 fortune <- function(which = NULL, fortunes.data = NULL)
 {
-  if(is.null(fortunes.data)) fortunes.data <- get("fortunes.data", pos = "package:fortunes")
+  if(is.null(fortunes.data)) fortunes.data <- get("fortunes.data", envir = fortunes.env)
+
   if(is.null(which)) which <- sample(1:nrow(fortunes.data), 1)
   if(is.character(which)) {
     fort <- apply(fortunes.data, 1, function(x) paste(x, collapse = " "))
