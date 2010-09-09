@@ -1,0 +1,10 @@
+--- pkg/DESCRIPTION	(revision 297)
++++ pkg/DESCRIPTION	(working copy)
+@@ -17,6 +17,6 @@
+ 	Andronic.
+ Maintainer: Achim Zeileis <Achim.Zeileis@R-project.org>
+ Description: R Fortunes
+-Depends: R (>= 2.1.0)
++Depends: R (>= 2.1.0), utils
+ LazyLoad: No
+ License: GPL-2

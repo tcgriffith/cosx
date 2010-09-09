@@ -1,0 +1,50 @@
+--- pkg/R/fortunes.R	(revision 297)
++++ pkg/R/fortunes.R	(working copy)
+@@ -106,3 +106,47 @@
+                   line3, "\n\n", sep = ""))
+ }
+ 
++toLatex.fortune <- function(object, ...) {
++  escape_latex <- function(x) {
++    x <- gsub("\\", "\\textbackslash ", x, fixed=TRUE)
++    x <- gsub("#", "\\#", x, fixed=TRUE)
++    x <- gsub("$", "\\$", x, fixed=TRUE)
++    x <- gsub("&", "\\&", x, fixed=TRUE)
++    x <- gsub("~", "\\textasciitilde ", x, fixed=TRUE)
++    x <- gsub("_", "\\_", x, fixed=TRUE)
++    x <- gsub("^", "\\verb|^|", x, fixed=TRUE)
++    x <- gsub("%", "\\%", x, fixed=TRUE)
++    x <- gsub("{", "\\{", x, fixed=TRUE)
++    x <- gsub("}", "\\}", x, fixed=TRUE)
++    x
++  }  
++  if(is.na(object$context)) {
++    object$context <- ""
++  }  
++  if(is.na(object$source)) {
++    object$source <- ""
++  }
++  if(is.na(object$date)) {
++    object$date <- ""
++  } else {
++    object$date <- paste(" (", object$date, ")", sep = "")
++  }
++  if(any(is.na(object))) stop("'quote' and 'author' are required")
++  quote <- strsplit(object$quote,"<x>")[[1]]
++  quote <- c(rbind(t(quote), t(rep("",length(quote)))))
++  z <- c("", "\\begin{minipage}{\\textwidth}")
++  z <- c(z,paste("\\makebox[0pt][r]{\\tiny ", attr(object, "row.names"), " }", escape_latex(quote[1]), sep=""))
++  z <- c(z, escape_latex(quote[-1]))
++  z <- c(z, paste("\\hfill---\\parbox[t]{.8\\textwidth}{{\\it ",
++                  escape_latex(object$author),
++                  "} ",
++                  escape_latex(object$context),
++                  sep=""),
++         "",
++         paste(escape_latex(object$source),
++               escape_latex(object$date), "}\\\\", sep=""),
++         "\\end{minipage}","")
++  class(z) <- "Latex"
++  z
++}
++

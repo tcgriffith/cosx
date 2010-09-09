@@ -1,0 +1,17 @@
+% \VignetteIndexEntry{fortunes}
+\documentclass{article}
+\setlength{\parindent}{0in}
+\title{Collected wisdom in R fortune}
+\begin{document}
+\maketitle
+
+<<echo=FALSE, results=tex>>=
+library("fortunes")
+n <- nrow(get("fortunes.data", envir = fortunes:::fortunes.env))
+fortunes <- lapply(1:n, function(i) {toLatex(fortune(i))})
+# to avoid the prefixed numbers from the list
+invisible(lapply(fortunes, print))
+@ 
+
+
+\end{document}
