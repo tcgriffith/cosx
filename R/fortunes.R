@@ -1,16 +1,16 @@
 read.fortunes <- function(file = NULL)
 {
-  if(!is.null(file) && file.exists(file)) {
-    fortunes <- file
+  if(!is.null(file)) {
+    fortunes <- file[file.exists(file)]
   } else {
     path <- system.file("fortunes", package = "fortunes")
     datafiles <- list.files(path)
     if(!is.null(file) && file.exists(file.path(path, file))) {
       fortunes <- file.path(path, file)
     } else {
-      if(!is.null(file)) stop("sorry, ", sQuote(file), " not found")
-      file <- datafiles[sapply(strsplit(datafiles, "\\."),
-			       function(x) x[length(x)] == "csv")]
+      if(length(file) > 0L) stop("sorry, ", sQuote(file), " not found")
+      file <- datafiles[grep("\\.csv$", datafiles)]
+      if(length(file) == 0L) stop("sorry, no fortunes data found")
       fortunes <- file.path(path, file)
     }
   }
@@ -26,19 +26,17 @@ read.fortunes <- function(file = NULL)
 
 fortunes.env <- new.env()
 
-.onLoad <- function(lib, pkg) {
-  assign("fortunes.data", read.fortunes(), envir = fortunes.env)
-}
-
-fortune <- function(which = NULL, fortunes.data = NULL)
+fortune <- function(which = NULL, fortunes.data = NULL, fixed = TRUE, ...)
 {
-  if(is.null(fortunes.data))
-    fortunes.data <- get("fortunes.data", envir = fortunes.env)
+  if(is.null(fortunes.data)) {
+    if(is.null(fortunes.env$fortunes.data)) fortunes.env$fortunes.data <- read.fortunes()
+    fortunes.data <- fortunes.env$fortunes.data
+  }
 
   if(is.null(which)) which <- sample(1:nrow(fortunes.data), 1)
   if(is.character(which)) {
     fort <- apply(fortunes.data, 1, function(x) paste(x, collapse = " "))
-    which1 <- grep(which, fort, useBytes = TRUE, fixed = TRUE)
+    which1 <- grep(which, fort, useBytes = TRUE, fixed = fixed, ...)
     if(length(which1) < 1) which1 <- grep(tolower(which), tolower(fort),
       useBytes = TRUE, fixed = TRUE)
     which <- which1
@@ -127,10 +125,10 @@ toLatex.fortune <- function(object, number = FALSE, width = c(1, 0.85), ...) {
     x <- gsub("...", "{\\dots}", x, fixed=TRUE)
     x <- gsub(" - ", " -- ", x, fixed=TRUE)
     x
-  }  
+  }
   if(is.na(object$context)) {
     object$context <- ""
-  }  
+  }
   if(is.na(object$source)) {
     object$source <- ""
   }
