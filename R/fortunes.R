@@ -26,7 +26,8 @@ read.fortunes <- function(file = NULL)
 
 fortunes.env <- new.env()
 
-fortune <- function(which = NULL, fortunes.data = NULL, fixed = TRUE, ...)
+fortune <- function(which = NULL, fortunes.data = NULL, fixed = TRUE,
+                    showMatches = FALSE, ...)
 {
   if(is.null(fortunes.data)) {
     if(is.null(fortunes.env$fortunes.data)) fortunes.env$fortunes.data <- read.fortunes()
@@ -39,6 +40,8 @@ fortune <- function(which = NULL, fortunes.data = NULL, fixed = TRUE, ...)
     which1 <- grep(which, fort, useBytes = TRUE, fixed = fixed, ...)
     if(length(which1) < 1) which1 <- grep(tolower(which), tolower(fort),
       useBytes = TRUE, fixed = TRUE)
+    if(showMatches) cat("Matching row numbers:",
+			paste(which1, collapse=", "), "\n")
     which <- which1
     if(length(which) > 1) which <- sample(which)
   }
@@ -84,7 +87,7 @@ print.fortune <- function(x, width = NULL, ...)
       line <- strsplit(line, " ")[[1]]
       if(any((nchar(line) + 1 + nchar(gap)) > width))
           stop("'width' is too small for fortune")
-      breakat <- which(cumsum(nchar(line) + 1) > width)[1] - 1
+      breakat <- which.max(cumsum(nchar(line) + 1) > width) - 1L
       rval <- paste(rval, paste(line[1:breakat], collapse = " "), "\n", sep = "")
       line <- paste(gap, paste(line[-(1:breakat)], collapse = " "), sep = "")
     }
