@@ -1,10 +1,10 @@
-5e46d1e36d77daa7cac25e66fc859396 *DESCRIPTION
+9c8307f0dcc934e5faa8b64c41c3b905 *DESCRIPTION
 b23fac91ad0e1b8cdba5258207641ed7 *NAMESPACE
 591e313c6c37b0713bae9a73cc7335fc *R/fortunes.R
 d2ef71bbf6355886a29664768d28ab1e *build/vignette.rds
 f54b1afd73a906c2851dc22a68dbccec *inst/doc/fortunes.R
 d4d78f990f4c6cf2536b8e269fed5e68 *inst/doc/fortunes.Rnw
-6202f96a62edcf8f5718e48d5d66cfe2 *inst/doc/fortunes.pdf
+7b8d405bb3df156b33066671c48ad243 *inst/doc/fortunes.pdf
 970e44f167c2c73c64a882d32b568c3b *inst/fortunes/fortunes.csv
-88a510fba01c6a39f54a60222c7a076f *man/fortunes.Rd
+1ae57d9264376a24b1e5babf92d272b2 *man/fortunes.Rd
 d4d78f990f4c6cf2536b8e269fed5e68 *vignettes/fortunes.Rnw
