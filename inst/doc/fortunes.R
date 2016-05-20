@@ -1,7 +1,7 @@
 ### R code from vignette source 'fortunes.Rnw'
 
 ###################################################
-### code chunk number 1: fortunes.Rnw:19-25
+### code chunk number 1: fortunes.Rnw:27-33
 ###################################################
 library("fortunes")
 library("utils")
