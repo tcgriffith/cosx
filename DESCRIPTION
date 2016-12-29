@@ -1,6 +1,6 @@
 Package: fortunes
-Version: 1.5-3
-Date: 2016-05-20
+Version: 1.5-4
+Date: 2016-12-29
 Title: R Fortunes
 Author: Achim Zeileis (R code) and the R community (fortunes).
         Contributions (fortunes and/or code) by Torsten Hothorn,
@@ -26,6 +26,6 @@ Description: A collection of fortunes from the R community.
 Imports: utils
 License: GPL-2 | GPL-3
 NeedsCompilation: no
-Packaged: 2016-05-20 07:36:36 UTC; zeileis
+Packaged: 2016-12-29 12:04:16 UTC; zeileis
 Repository: CRAN
-Date/Publication: 2016-05-20 09:42:36
+Date/Publication: 2016-12-29 13:50:47

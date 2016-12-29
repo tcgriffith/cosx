@@ -20,39 +20,45 @@ read.fortunes <- function(file = NULL)
     rval <- rbind(rval, read.table(file, header = TRUE, sep = ";",
 				   quote = "\"", colClasses = "character"))
   }
-
-  return(rval)
+  rval
 }
 
 fortunes.env <- new.env()
 
 fortune <- function(which = NULL, fortunes.data = NULL, fixed = TRUE,
-                    showMatches = FALSE, ...)
+                    showMatches = FALSE, author = character(), ...)
 {
   if(is.null(fortunes.data)) {
     if(is.null(fortunes.env$fortunes.data)) fortunes.env$fortunes.data <- read.fortunes()
     fortunes.data <- fortunes.env$fortunes.data
   }
 
-  if(is.null(which)) which <- sample(1:nrow(fortunes.data), 1)
-  if(is.character(which)) {
-    fort <- apply(fortunes.data, 1, function(x) paste(x, collapse = " "))
-    which1 <- grep(which, fort, useBytes = TRUE, fixed = fixed, ...)
-    if(length(which1) < 1) which1 <- grep(tolower(which), tolower(fort),
-      useBytes = TRUE, fixed = TRUE)
-    if(showMatches) cat("Matching row numbers:",
-			paste(which1, collapse=", "), "\n")
+  if(is.null(which) && !length(author)) {
+    which <- sample.int(nrow(fortunes.data), 1)
+  } else if(is.character(which) || length(author)) {
+    if(length(author)) {
+      if(is.null(fd.auth <- fortunes.data[, "author"])) {
+        warning("'fortunes.data' does not have an \"author\" column")
+      } else {
+        fortunes.data <- fortunes.data[grep(author, fd.auth, useBytes = TRUE, fixed = fixed), ]
+      }
+    }
+    if(is.character(which)) {
+      fort <- apply(fortunes.data, 1, function(x) paste(x, collapse = " "))
+      which1 <- grep(which, fort, useBytes = TRUE, fixed = fixed, ...)
+      if(length(which1) < 1) which1 <- grep(tolower(which), tolower(fort), useBytes = TRUE, fixed = TRUE, ...)
+    } else {
+      which1 <- seq_len(nrow(fortunes.data))
+    }
+    if(showMatches) cat("Matching row numbers:", paste(which1, collapse = ", "), "\n")
     which <- which1
-    if(length(which) > 1) which <- sample(which)
+    if(length(which) > 1) which <- sample(which, size = 1)
   }
-  if(length(which) > 1) which <- which[1]
   if(length(which) > 0 && which %in% seq(along = rownames(fortunes.data))) {
-    rval <- fortunes.data[which, ]
-    class(rval) <- "fortune"
+    structure(fortunes.data[which, ], class = "fortune")
   } else {
-    rval <- character(0)
+    character(0)
   }
-  return(rval)
 }
 
 print.fortune <- function(x, width = NULL, ...)
@@ -60,20 +66,10 @@ print.fortune <- function(x, width = NULL, ...)
   if(is.null(width)) width <- getOption("width")
   if(width < 10) stop("'width' must be greater than 10")
 
-  if(is.na(x$context)) {
-    x$context <- ""
-  } else {
-    x$context <- paste(" (", x$context, ")", sep = "")
-  }
-  if(is.na(x$source)) {
-    x$source <- ""
-  }
-  if(is.na(x$date)) {
-    x$date <- ""
-  } else {
-    x$date <- paste(" (", x$date, ")", sep = "")
-  }
-  if(any(is.na(x))) stop("'quote' and 'author' are required")
+  x$context <- if(is.na(x$context)) "" else paste(" (", x$context, ")", sep = "")
+  if(is.na(x$source)) x$source <- ""
+  x$date <- if(is.na(x$date)) "" else x$date <- paste(" (", x$date, ")", sep = "")
+  if(anyNA(x)) stop("'quote' and 'author' are required")
 
   line1 <- x$quote
   line2 <- paste("   -- ", x$author, x$context, sep = "")
@@ -91,8 +87,7 @@ print.fortune <- function(x, width = NULL, ...)
       rval <- paste(rval, paste(line[1:breakat], collapse = " "), "\n", sep = "")
       line <- paste(gap, paste(line[-(1:breakat)], collapse = " "), sep = "")
     }
-    rval <- paste(rval, line, sep = "")
-    return(rval)
+    paste(rval, line, sep = "")
   }
 
   line1 <- strsplit(line1, "<x>")[[1]]
@@ -135,12 +130,9 @@ toLatex.fortune <- function(object, number = FALSE, width = c(1, 0.85), ...) {
   if(is.na(object$source)) {
     object$source <- ""
   }
-  if(is.na(object$date)) {
-    object$date <- ""
-  } else {
-    object$date <- paste(" (", object$date, ")", sep = "")
-  }
-  if(any(is.na(object))) stop("'quote' and 'author' are required")
+  object$date <- if(is.na(object$date)) "" else object$date <- paste(" (", object$date, ")", sep = "")
+
+  if(anyNA(object)) stop("'quote' and 'author' are required")
   quote <- strsplit(object$quote,"<x>")[[1]]
   quote <- c(rbind(t(quote), t(rep("",length(quote)))))
   z <- paste("\\begin{minipage}{", width[1], "\\textwidth}", sep = "")
