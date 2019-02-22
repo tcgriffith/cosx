@@ -1,9 +1,7 @@
 Meta
-doc
 .Rproj.user
 .Rhistory
 .RData
-inst/doc
 revdep/checks
 revdep/library
 inst2/
