@@ -1,11 +1,17 @@
-#' Title
+#' Read R cosx fortunes.
 #'
-#' @param file
+#' @param file a character string giving a cosx fortune database in csv format (in UTF-8 encoding). By default all csv files in the data directory of the cosx package are used.
 #'
-#' @return
+#' @return a data frame of fortunes, each row contains:
+#' - quote:	the quote, main part of the fortune,
+#' - author: the author of the quote,
+#' - context: the context in which it was quoted (if available, otherwise NA),
+#' - source	: where it was quoted (if available, otherwise NA),
+#' - date:	when it was quoted (if available, otherwise NA).
 #' @export
 #'
 #' @examples
+#' read.cosxs()
 read.cosxs <- function(file = NULL)
 {
   old_loc <- Sys.getlocale("LC_CTYPE")
@@ -37,19 +43,20 @@ read.cosxs <- function(file = NULL)
 
 cosxs.env <- new.env()
 
-#' Title
+#' Find R cosx fortunes.
 #'
-#' @param which
-#' @param cosxs.data
-#' @param fixed
-#' @param showMatches
-#' @param author
-#' @param ...
+#' @param which an integer specifying the row number of `cosxs.data`. Alternatively `which`` can be a character and `grep`` is used to try to find a suitable row.
+#' @param cosxs.data data frame containing a fortune in each row. By default the data from the 'cosx' package are used.
+#' @param fixed logical passed to `grep` if `which`` is a character, indicating if it should work (if `TRUE`, as by default) with a simple character string or (if `FALSE`) with regular expressions.
+#' @param showMatches if `which` is character, a logical indicating if `cosx()` should print all the row numbers of `cosxs.data` which match the `grep` search.
+#' @param author a character string to match (via `grep`) to the "authors" column of `cosxs.data`.
+#' @param ... potential further arguments passed to `grep`.
 #'
-#' @return
+#' @return an object of class "cosx" which is a row from a data frame of fortunes (like those read in from read.cosxs).
 #' @export
 #'
 #' @examples
+#' fortune()
 cosx <- function(which = NULL, cosxs.data = NULL, fixed = TRUE,
                     showMatches = FALSE, author = character(), ...)
 {
@@ -86,16 +93,14 @@ cosx <- function(which = NULL, cosxs.data = NULL, fixed = TRUE,
   }
 }
 
-#' Title
+#' Print R cosx fortunes.
 #'
-#' @param x
-#' @param width
-#' @param ...
+#' @param x an object of class "cosx", usually a single row from `cosxs.data`.
+#' @param width integer specifying the character width. By default getOption("width") is used.
+#' @param ... potential further arguments passed to `grep`.
 #'
-#' @return
+#' @return print.
 #' @export
-#'
-#' @examples
 print.cosx <- function(x, width = NULL, ...)
 {
   if(is.null(width)) width <- getOption("width")
@@ -132,68 +137,9 @@ print.cosx <- function(x, width = NULL, ...)
   # line2 <- linesplit(line2, width)
   # line3 <- linesplit(line3, width)
 
-  cat(paste("\n", line1, "\n",
+  cat(paste("\n", line1, "\n\n\n",
                   line2, "\n",
                   line3, "\n\n", sep = ""))
 }
 
-#' Title
-#'
-#' @param object
-#' @param number
-#' @param width
-#' @param ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
-toLatex.cosx <- function(object, number = FALSE, width = c(1, 0.85), ...) {
-  width <- rep(width, length.out = 2)
-  escape_latex <- function(x) {
-    x <- gsub("\\\\ ", "\\textbackslash\\ ", x, fixed=TRUE)
-    x <- gsub("\\\\", "\\textbackslash ", x, fixed=TRUE)
-    x <- gsub("\\n", "\\textbackslash n", x, fixed=TRUE)
-    x <- gsub("#", "\\#", x, fixed=TRUE)
-    x <- gsub("$", "\\$", x, fixed=TRUE)
-    x <- gsub("&", "\\&", x, fixed=TRUE)
-    x <- gsub("~ ", "\\textasciitilde\\ ", x, fixed=TRUE)
-    x <- gsub("~", "\\textasciitilde ", x, fixed=TRUE)
-    x <- gsub("_", "\\_", x, fixed=TRUE)
-    x <- gsub("^", "\\verb|^|", x, fixed=TRUE)
-    x <- gsub("%", "\\%", x, fixed=TRUE)
-    x <- gsub("{", "\\{", x, fixed=TRUE)
-    x <- gsub("}", "\\}", x, fixed=TRUE)
-    x <- gsub(" '", " `", x, fixed=TRUE)
-    x <- gsub(" \"", " ``", x, fixed=TRUE)
-    x <- gsub("...", "{\\dots}", x, fixed=TRUE)
-    x <- gsub(" - ", " -- ", x, fixed=TRUE)
-    x
-  }
-  if(is.na(object$context)) {
-    object$context <- ""
-  }
-  if(is.na(object$source)) {
-    object$source <- ""
-  }
-  object$date <- if(is.na(object$date)) "" else object$date <- paste(" (", object$date, ")", sep = "")
-
-  if(anyNA(object)) stop("'quote' and 'author' are required")
-  quote <- strsplit(object$quote,"<x>")[[1]]
-  quote <- c(rbind(t(quote), t(rep("",length(quote)))))
-  z <- paste("\\begin{minipage}{", width[1], "\\textwidth}", sep = "")
-  z <- c(z, paste(
-    if(number) paste("\\makebox[0pt][r]{\\tiny ", attr(object, "row.names"), "} ", sep = "") else "",
-    escape_latex(quote[1]), sep="")
-  )
-  z <- c(z, escape_latex(quote[-1]))
-  z <- c(z, paste("\\hfill---\\parbox[t]{", width[2], "\\textwidth}{\\emph{",
-    escape_latex(object$author), "}", sep = ""),
-    if(object$context == "") "" else paste("(", escape_latex(object$context), ")", sep = ""),
-    "",
-    paste(escape_latex(object$source), escape_latex(object$date), "}", sep=""),
-    "\\end{minipage}")
-  class(z) <- "Latex"
-  z
-}
 

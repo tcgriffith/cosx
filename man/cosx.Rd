@@ -2,14 +2,30 @@
 % Please edit documentation in R/cosx.R
 \name{cosx}
 \alias{cosx}
-\title{Title}
+\title{Find R cosx fortunes.}
 \usage{
 cosx(which = NULL, cosxs.data = NULL, fixed = TRUE, showMatches = FALSE, 
     author = character(), ...)
 }
 \arguments{
-\item{...}{}
+\item{which}{an integer specifying the row number of `cosxs.data`. Alternatively `which`` can be a character and `grep`` is used to try to find a suitable row.}
+
+\item{cosxs.data}{data frame containing a fortune in each row. By default the data from the 'cosx' package are used.}
+
+\item{fixed}{logical passed to `grep` if `which`` is a character, indicating if it should work (if `TRUE`, as by default) with a simple character string or (if `FALSE`) with regular expressions.}
+
+\item{showMatches}{if `which` is character, a logical indicating if `cosx()` should print all the row numbers of `cosxs.data` which match the `grep` search.}
+
+\item{author}{a character string to match (via `grep`) to the "authors" column of `cosxs.data`.}
+
+\item{...}{potential further arguments passed to `grep`.}
+}
+\value{
+an object of class "cosx" which is a row from a data frame of fortunes (like those read in from read.cosxs).
 }
 \description{
-Title
+Find R cosx fortunes.
+}
+\examples{
+fortune()
 }

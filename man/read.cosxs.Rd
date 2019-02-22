@@ -2,13 +2,24 @@
 % Please edit documentation in R/cosx.R
 \name{read.cosxs}
 \alias{read.cosxs}
-\title{Title}
+\title{Read R cosx fortunes.}
 \usage{
 read.cosxs(file = NULL)
 }
 \arguments{
-\item{file}{}
+\item{file}{a character string giving a cosx fortune database in csv format (in UTF-8 encoding). By default all csv files in the data directory of the cosx package are used.}
+}
+\value{
+a data frame of fortunes, each row contains:
+- quote:	the quote, main part of the fortune,
+- author: the author of the quote,
+- context: the context in which it was quoted (if available, otherwise NA),
+- source	: where it was quoted (if available, otherwise NA),
+- date:	when it was quoted (if available, otherwise NA).
 }
 \description{
-Title
+Read R cosx fortunes.
+}
+\examples{
+read.cosxs()
 }

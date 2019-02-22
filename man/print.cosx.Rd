@@ -2,13 +2,20 @@
 % Please edit documentation in R/cosx.R
 \name{print.cosx}
 \alias{print.cosx}
-\title{Title}
+\title{Print R cosx fortunes.}
 \usage{
 \method{print}{cosx}(x, width = NULL, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{an object of class "cosx", usually a single row from `cosxs.data`.}
+
+\item{width}{integer specifying the character width. By default getOption("width") is used.}
+
+\item{...}{potential further arguments passed to `grep`.}
+}
+\value{
+print.
 }
 \description{
-Title
+Print R cosx fortunes.
 }
