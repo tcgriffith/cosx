@@ -1,5 +1,5 @@
 Package: cosx
-Version: 0.0.1
+Version: 0.0.2
 Date: 2019-02-22
 Title: COSX Fortunes
 Authors@R: c(
@@ -9,10 +9,11 @@ Maintainer: Peng Zhao <pzhao@pzhao.net>
 Imports: utils
 License: GPL-2 | GPL-3
 Depends: R (>= 3.1.0)
-Suggests:
+Suggests: knitr, rmarkdown
 Description: A collection of fortunes from cosx.org.
 URL: https://github.com/pzhaonet/cosx
 BugReports: https://github.com/pzhaonet/coxs/issues
 RoxygenNote: 6.1.1
 NeedsCompilation: no
 LazyData: true
+VignetteBuilder: knitr
