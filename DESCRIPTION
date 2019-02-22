@@ -27,5 +27,4 @@ Imports: utils
 License: GPL-2 | GPL-3
 NeedsCompilation: no
 Packaged: 2016-12-29 12:04:16 UTC; zeileis
-Repository: CRAN
-Date/Publication: 2016-12-29 13:50:47
+LazyData: true

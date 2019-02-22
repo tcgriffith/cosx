@@ -1,67 +1,98 @@
-read.fortunes <- function(file = NULL)
+#' Title
+#'
+#' @param file
+#'
+#' @return
+#' @export
+#'
+#' @examples
+read.cosxs <- function(file = NULL)
 {
   if(!is.null(file)) {
-    fortunes <- file[file.exists(file)]
+    cosxs <- file[file.exists(file)]
   } else {
-    path <- system.file("fortunes", package = "fortunes")
+    path <- system.file("cosxs", package = "cosx")
     datafiles <- list.files(path)
     if(!is.null(file) && file.exists(file.path(path, file))) {
-      fortunes <- file.path(path, file)
+      cosxs <- file.path(path, file)
     } else {
       if(length(file) > 0L) stop("sorry, ", sQuote(file), " not found")
       file <- datafiles[grep("\\.csv$", datafiles)]
-      if(length(file) == 0L) stop("sorry, no fortunes data found")
-      fortunes <- file.path(path, file)
+      if(length(file) == 0L) stop("sorry, no cosxs data found")
+      cosxs <- file.path(path, file)
     }
   }
 
   rval <- NULL
-  for(file in fortunes) {
+  for(file in cosxs) {
     rval <- rbind(rval, read.table(file, header = TRUE, sep = ";",
-				   quote = "\"", colClasses = "character"))
+				   quote = "\"", colClasses = "character", encoding = 'UTF-8'))
   }
   rval
 }
 
-fortunes.env <- new.env()
+cosxs.env <- new.env()
 
-fortune <- function(which = NULL, fortunes.data = NULL, fixed = TRUE,
+#' Title
+#'
+#' @param which
+#' @param cosxs.data
+#' @param fixed
+#' @param showMatches
+#' @param author
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+cosx <- function(which = NULL, cosxs.data = NULL, fixed = TRUE,
                     showMatches = FALSE, author = character(), ...)
 {
-  if(is.null(fortunes.data)) {
-    if(is.null(fortunes.env$fortunes.data)) fortunes.env$fortunes.data <- read.fortunes()
-    fortunes.data <- fortunes.env$fortunes.data
+  if(is.null(cosxs.data)) {
+    if(is.null(cosxs.env$cosxs.data)) cosxs.env$cosxs.data <- read.cosxs()
+    cosxs.data <- cosxs.env$cosxs.data
   }
 
   if(is.null(which) && !length(author)) {
-    which <- sample.int(nrow(fortunes.data), 1)
+    which <- sample.int(nrow(cosxs.data), 1)
   } else if(is.character(which) || length(author)) {
     if(length(author)) {
-      if(is.null(fd.auth <- fortunes.data[, "author"])) {
-        warning("'fortunes.data' does not have an \"author\" column")
+      if(is.null(fd.auth <- cosxs.data[, "author"])) {
+        warning("'cosxs.data' does not have an \"author\" column")
       } else {
-        fortunes.data <- fortunes.data[grep(author, fd.auth, useBytes = TRUE, fixed = fixed), ]
+        cosxs.data <- cosxs.data[grep(author, fd.auth, useBytes = TRUE, fixed = fixed), ]
       }
     }
     if(is.character(which)) {
-      fort <- apply(fortunes.data, 1, function(x) paste(x, collapse = " "))
+      fort <- apply(cosxs.data, 1, function(x) paste(x, collapse = " "))
       which1 <- grep(which, fort, useBytes = TRUE, fixed = fixed, ...)
       if(length(which1) < 1) which1 <- grep(tolower(which), tolower(fort), useBytes = TRUE, fixed = TRUE, ...)
     } else {
-      which1 <- seq_len(nrow(fortunes.data))
+      which1 <- seq_len(nrow(cosxs.data))
     }
     if(showMatches) cat("Matching row numbers:", paste(which1, collapse = ", "), "\n")
     which <- which1
     if(length(which) > 1) which <- sample(which, size = 1)
   }
-  if(length(which) > 0 && which %in% seq(along = rownames(fortunes.data))) {
-    structure(fortunes.data[which, ], class = "fortune")
+  if(length(which) > 0 && which %in% seq(along = rownames(cosxs.data))) {
+    structure(cosxs.data[which, ], class = "cosx")
   } else {
     character(0)
   }
 }
 
-print.fortune <- function(x, width = NULL, ...)
+#' Title
+#'
+#' @param x
+#' @param width
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+print.cosx <- function(x, width = NULL, ...)
 {
   if(is.null(width)) width <- getOption("width")
   if(width < 10) stop("'width' must be greater than 10")
@@ -75,34 +106,45 @@ print.fortune <- function(x, width = NULL, ...)
   line2 <- paste("   -- ", x$author, x$context, sep = "")
   line3 <- paste("      ", x$source, x$date, sep = "")
 
-  ## Problem: account for chase where line contains "\n"
-  linesplit <- function(line, width, gap = "      ") {
-    if(nchar(line) < width) return(line)
-    rval <- NULL
-    while(nchar(line) > width) {
-      line <- strsplit(line, " ")[[1]]
-      if(any((nchar(line) + 1 + nchar(gap)) > width))
-          stop("'width' is too small for fortune")
-      breakat <- which.max(cumsum(nchar(line) + 1) > width) - 1L
-      rval <- paste(rval, paste(line[1:breakat], collapse = " "), "\n", sep = "")
-      line <- paste(gap, paste(line[-(1:breakat)], collapse = " "), sep = "")
-    }
-    paste(rval, line, sep = "")
-  }
+  # ## Problem: account for chase where line contains "\n"
+  # linesplit <- function(line, width, gap = "      ") {
+  #   if(nchar(line) < width) return(line)
+  #   rval <- NULL
+  #   while(nchar(line) > width) {
+  #     line <- strsplit(line, " ")[[1]]
+  #     if(any((nchar(line) + 1 + nchar(gap)) > width))
+  #         stop("'width' is too small for cosx")
+  #     breakat <- which.max(cumsum(nchar(line) + 1) > width) - 1L
+  #     rval <- paste(rval, paste(line[1:breakat], collapse = " "), "\n", sep = "")
+  #     line <- paste(gap, paste(line[-(1:breakat)], collapse = " "), sep = "")
+  #   }
+  #   paste(rval, line, sep = "")
+  # }
 
-  line1 <- strsplit(line1, "<x>")[[1]]
-  for(i in 1:length(line1))
-    line1[i] <- linesplit(line1[i], width, gap = "")
+  line1 <- strsplit(line1, "\\\\n")[[1]]
+  # for(i in 1:length(line1))
+  #   line1[i] <- linesplit(line1[i], width, gap = "")
   line1 <- paste(line1, collapse = "\n")
-  line2 <- linesplit(line2, width)
-  line3 <- linesplit(line3, width)
+  # line2 <- linesplit(line2, width)
+  # line3 <- linesplit(line3, width)
 
   cat(paste("\n", line1, "\n",
                   line2, "\n",
                   line3, "\n\n", sep = ""))
 }
 
-toLatex.fortune <- function(object, number = FALSE, width = c(1, 0.85), ...) {
+#' Title
+#'
+#' @param object
+#' @param number
+#' @param width
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+toLatex.cosx <- function(object, number = FALSE, width = c(1, 0.85), ...) {
   width <- rep(width, length.out = 2)
   escape_latex <- function(x) {
     x <- gsub("\\\\ ", "\\textbackslash\\ ", x, fixed=TRUE)
