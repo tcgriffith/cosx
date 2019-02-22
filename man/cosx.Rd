@@ -27,5 +27,5 @@ an object of class "cosx" which is a row from a data frame of fortunes (like tho
 Find R cosx fortunes.
 }
 \examples{
-fortune()
+cosx()
 }

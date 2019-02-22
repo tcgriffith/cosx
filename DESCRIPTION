@@ -1,5 +1,5 @@
 Package: cosx
-Version: 0.0.3
+Version: 0.0.4
 Date: 2019-02-22
 Title: COSX Fortunes
 Authors@R: c(
@@ -12,7 +12,7 @@ Depends: R (>= 3.1.0)
 Suggests: knitr, rmarkdown
 Description: A collection of fortunes from cosx.org.
 URL: https://github.com/pzhaonet/cosx
-BugReports: https://github.com/pzhaonet/coxs/issues
+BugReports: https://github.com/pzhaonet/cosx/issues
 RoxygenNote: 6.1.1
 NeedsCompilation: no
 LazyData: true

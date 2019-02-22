@@ -8,6 +8,7 @@
 #' - context: the context in which it was quoted (if available, otherwise NA),
 #' - source	: where it was quoted (if available, otherwise NA),
 #' - date:	when it was quoted (if available, otherwise NA).
+#' @importFrom utils read.table
 #' @export
 #'
 #' @examples
@@ -56,7 +57,7 @@ cosxs.env <- new.env()
 #' @export
 #'
 #' @examples
-#' fortune()
+#' cosx()
 cosx <- function(which = NULL, cosxs.data = NULL, fixed = TRUE,
                     showMatches = FALSE, author = character(), ...)
 {

@@ -9,7 +9,7 @@ f$quote <- gsub('\\\\n', '\n',  f$quote)
 Sys.setlocale("LC_CTYPE","Chinese")
 n <- nrow(f)
 f$n <- 1:n
-f$vig <- paste(paste0('### ', f$n), f$quote, paste0('--- ', f$author, ' (', f$context, '), ', f$source, ', ', f$date), sep = '\n\n')
+f$vig <- paste(paste0('### ', f$n), f$quote, paste0('\n\n\n\n--- ', f$author, ' (', f$context, '), ', f$source, ', ', f$date), sep = '\n\n')
 
 ## ---- results='asis', echo=FALSE-----------------------------------------
 cat(f$vig, sep = '\n\n\n\n')

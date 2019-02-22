@@ -3,3 +3,4 @@
 S3method(print,cosx)
 export(cosx)
 export(read.cosxs)
+importFrom(utils,read.table)
