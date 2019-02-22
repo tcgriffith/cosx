@@ -1,30 +1,18 @@
-Package: fortunes
-Version: 1.5-4
-Date: 2016-12-29
-Title: R Fortunes
-Author: Achim Zeileis (R code) and the R community (fortunes).
-        Contributions (fortunes and/or code) by Torsten Hothorn,
-	Peter Dalgaard, Uwe Ligges, Kevin Wright, Martin Maechler,
-	Kjetil Brinchmann Halvorsen, Kurt Hornik, Duncan Murdoch,
-	Andy Bunn, Ray Brownrigg, Roger Bivand, Spencer Graves,
-	Jim Lemon, Christian Kleiber, David L. Reiner,
-	Berton Gunter, Roger Koenker, Charles Berry, Marc Schwartz,
-	Michael Dewey, Ben Bolker, Peter Dunn, Sarah Goslee, Simon
-	Blomberg, Bill Venables, Roland Rau, Thomas Petzoldt, Rolf
-	Turner, Mark Leeds, Emmanuel Charpentier, Chris Evans, Paolo
-	Sonego, Peter Ehlers, Detlef Steuer, Tal Galili, Greg Snow,
-	Brian D. Ripley, Michael Sumner, David Winsemius, Liviu
-	Andronic, Brian Diggs, Matthieu Stigler, Michael Friendly,
-	Dirk Eddelbuettel, Richard M. Heiberger, Patrick Burns,
-	Dieter Menne, Andrie de Vries, Barry Rowlingson, Renaud
-	Lancelot, R. Michael Weylandt, Jon Olav Skoien, Francois
-	Morneau, Antony Unwin, Joshua Wiley, Terry Therneau, Bryan
-	Hanson, Henrik Singmann, Eduard Szoecs, Gregor Passolt,
-	John C. Nash.
-Maintainer: Achim Zeileis <Achim.Zeileis@R-project.org>
-Description: A collection of fortunes from the R community.
+Package: cosx
+Version: 0.0.0
+Date: 2019-02-22
+Title: COSX Fortunes
+Authors@R: c(
+    person("Peng", "Zhao", role = c("aut", "cre"), email = "pzhao@pzhao.net")
+  )
+Maintainer: Peng Zhao <pzhao@pzhao.net>
 Imports: utils
 License: GPL-2 | GPL-3
+Depends: R (>= 3.1.0)
+Suggests:
+Description: A collection of fortunes from cosx.org.
+URL: https://github.com/pzhaonet/cosx
+BugReports: https://github.com/pzhaonet/coxs/issues
+RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2016-12-29 12:04:16 UTC; zeileis
 LazyData: true
