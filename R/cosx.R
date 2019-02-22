@@ -97,15 +97,14 @@ cosx <- function(which = NULL, cosxs.data = NULL, fixed = TRUE,
 #' Print R cosx fortunes.
 #'
 #' @param x an object of class "cosx", usually a single row from `cosxs.data`.
-#' @param width integer specifying the character width. By default getOption("width") is used.
 #' @param ... potential further arguments passed to `grep`.
 #'
 #' @return print.
 #' @export
-print.cosx <- function(x, width = NULL, ...)
+print.cosx <- function(x, ...)
 {
-  if(is.null(width)) width <- getOption("width")
-  if(width < 10) stop("'width' must be greater than 10")
+  # if(is.null(width)) width <- getOption("width")
+  # if(width < 10) stop("'width' must be greater than 10")
 
   x$context <- if(is.na(x$context)) "" else paste(" (", x$context, ")", sep = "")
   if(is.na(x$source)) x$source <- ""
@@ -144,3 +143,15 @@ print.cosx <- function(x, width = NULL, ...)
 }
 
 
+merge_text <- function(method = c('console', 'vig')){
+  method <- match.arg(method)
+  f <- read.cosxs(system.file("cosxs", "cosxs.csv", package = "cosx"))
+  f$quote <- gsub('\\\\n', '\n',  f$quote)
+
+  Sys.setlocale("LC_CTYPE","Chinese")
+  n <- nrow(f)
+  f$n <- 1:n
+  if(method == 'vig') f$vig <- paste(paste0('### ', f$n), f$quote, paste0('\n\n--- ', f$author, ' (', f$context, '), ', f$source, ', ', f$date), sep = '\n\n')
+  if(method == 'console') f$vig <- paste(f$quote, paste0('\n--- ', f$author, ' (', f$context, '), ', f$source, ', ', f$date), sep = '\n\n')
+  return(f)
+}
