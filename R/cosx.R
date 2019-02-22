@@ -8,6 +8,10 @@
 #' @examples
 read.cosxs <- function(file = NULL)
 {
+  old_loc <- Sys.getlocale("LC_CTYPE")
+  on.exit(Sys.setlocale("LC_CTYPE",old_loc))
+  Sys.setlocale("LC_CTYPE","English")
+
   if(!is.null(file)) {
     cosxs <- file[file.exists(file)]
   } else {
